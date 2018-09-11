@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blog.dao.NoticeDao" >
+  <resultMap id="BaseResultMap" type="com.blog.model.Notice" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="notifydesc" property="notifydesc" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="selectNoticeById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from notifytable where id = #{id}
+  </select>
+
+  <select id="queryAllNotice" resultMap="BaseResultMap"  >
+    select *
+    from notifytable
+    ORDER BY id ASC
+  </select>
+
+  <update id="updateNotice" parameterType="com.blog.model.Notice" >
+    update notifytable
+    <set >
+      <if test="notifydesc != null" >
+        notifydesc = #{notifydesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id}
+
+  </update>
+
+  <insert id="insertNotice" parameterType="com.blog.model.Notice">
+    insert into notifytable
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    <if test="id != null" >
+      id,
+    </if>
+    <if test="notifydesc != null" >
+      notifydesc,
+    </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    <if test="id != null" >
+      #{id,jdbcType=INTEGER},
+    </if>
+    <if test="notifydesc != null" >
+      #{notifydesc,jdbcType=VARCHAR},
+    </if>
+    </trim>
+  </insert>
+
+  <delete id="noticeDeleteById" parameterType="java.lang.Integer">
+     delete from notifytable
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+</mapper>

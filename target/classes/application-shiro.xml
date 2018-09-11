@@ -1,0 +1,28 @@
+<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+    <!-- 必须设置 -->
+    <property name="securityManager" ref="securityManager"/>
+    <!-- 3 个 url 属性为可选设置 -->
+    <property name="loginUrl" value="/login.jsp"/>
+    <property name="successUrl" value="/home.jsp"/>
+    <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
+    <property name="filterChainDefinitions">
+        <value>
+            <!-- 对静态资源设置匿名访问 -->
+            /resources/** = anon
+            /login = anon
+            <!-- /** = authc 所有url都必须认证通过才可以访问-->
+            /** = authc
+        </value>
+    </property>
+</bean>
+
+        <!-- 安全管理器 -->
+<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+<property name="realm" ref="customRealm" />
+</bean>
+
+        <!-- 自定义 realm -->
+<bean id="customRealm" class="com.blog.Shiro.CustomRealm"></bean>
+
+        <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
